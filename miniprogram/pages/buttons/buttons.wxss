@@ -1,0 +1,86 @@
+/* miniprogram/pages/buttons/buttons.wxss */
+
+page {
+  background: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+
+
+@font-face {
+  font-family: 'iconfont';  /* project id 1486996 */
+  src: url('//at.alicdn.com/t/font_1486996_tgqtb59vion.eot');
+  src: url('//at.alicdn.com/t/font_1486996_tgqtb59vion.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_1486996_tgqtb59vion.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_1486996_tgqtb59vion.woff') format('woff'),
+  url('//at.alicdn.com/t/font_1486996_tgqtb59vion.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_1486996_tgqtb59vion.svg#iconfont') format('svg');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-shut:before {
+  content: "\e6f0";
+
+}
+
+.icon-boom:before {
+  content: "\e6f8";
+}
+
+.button-container {
+  height: 100%;
+  widows: 100%;
+  display: flex;
+  align-items: center; /*定义body的元素垂直居中*/
+  justify-content: center; /*定义body的里的元素水平居中*/
+  /* padding-top: 10%; */
+  flex-direction: column;
+}
+
+.shut-button-container {
+  padding-top: 200rpx;
+}
+
+.boom-button-container {
+  padding-top: 350rpx;
+}
+
+.button {
+  padding-top: 6px;
+  transform:scale(3.5);
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+.shut-button-color {
+  background-color: rgb(100, 103, 105);
+}
+
+.boom-button-color {
+  background-color: rgb(252, 3, 3);
+}
+
+.input {
+  background-color: white;
+  border-style: solid;
+  border-color: rgb(184, 184, 184);
+  border-width: 1px;
+  border-radius: 5px;
+}
+
+.edit-name {
+  font-size: 32rpx;
+  color: #007aff;
+  background-color: white;
+  background-size: cover;
+}

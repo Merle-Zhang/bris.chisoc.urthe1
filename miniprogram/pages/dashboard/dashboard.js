@@ -1,11 +1,15 @@
-// pages/chooseLib/chooseLib.js
+// miniprogram/pages/dashboard/dashboard.js
+
+const app = getApp()
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    guestsArray: [],
+    remainder: 0
   },
 
   /**
@@ -26,6 +30,24 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    const db = wx.cloud.database()
+    db.collection('guests').get().then(res => {
+      this.setData({
+        guestsArray: res.data
+      })
+      wx.showToast({
+        title: 'Success',
+      })
+      console.log(res.data)
+    })
+    db.collection('guests').where({
+      shut: false
+    }).get().then(res => {
+      this.setData({
+        remainder: res.data.length
+      })
+    })
+
 
   },
 

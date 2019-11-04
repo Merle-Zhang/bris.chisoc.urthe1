@@ -1,0 +1,34 @@
+<!--miniprogram/pages/buttons/buttons.wxml-->
+<view class="container">
+  <input 
+    wx:if="{{isEditingName}}"
+    class="input" 
+    bindinput="bindInputName"
+    placeholder="请输入名字"
+  ></input>
+
+  <button 
+    class="edit-name"
+    bindtap="onTapName">{{isEditingName ? '提交' : name.length != 0 ? name : '点我修改姓名'}}</button>
+
+  <view class="button-container">
+    <view class="shut-button-container">
+      <button 
+        class="iconfont icon-shut button shut-button-color" 
+        loading="{{loading}}"
+        disabled="{{disabled}}"
+        bindtap="onShut"
+      ></button>
+    </view>
+    <view class="boom-button-container">
+      <button 
+        class="iconfont icon-boom button boom-button-color" 
+        loading="{{loading}}"
+        disabled="{{disabled}}"
+        bindtap="onBoom"
+      ></button>
+    </view>
+
+  </view>
+
+</view>

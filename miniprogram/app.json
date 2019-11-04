@@ -1,18 +1,8 @@
 {
   "pages": [
+    "pages/buttons/buttons",
     "pages/index/index",
-    "pages/userConsole/userConsole",
-    "pages/storageConsole/storageConsole",
-    "pages/databaseGuide/databaseGuide",
-    "pages/addFunction/addFunction",
-    "pages/deployFunctions/deployFunctions",
-    "pages/chooseLib/chooseLib",
-    "pages/openapi/openapi",
-    "pages/openapi/serverapi/serverapi",
-    "pages/openapi/callback/callback",
-    "pages/openapi/cloudid/cloudid",
-    "pages/im/im",
-    "pages/im/room/room"
+    "pages/dashboard/dashboard"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -21,5 +11,20 @@
     "navigationBarTitleText": "非诚勿扰",
     "navigationBarTextStyle": "black"
   },
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "tabBar": {
+    "color": "#a9b7b7",
+    "selectedColor": "#11cd6e",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/buttons/buttons",
+        "text": "Button"
+      },
+      {
+        "pagePath": "pages/dashboard/dashboard",
+        "text": "Dashboard"
+      }
+    ]
+  }
 }
