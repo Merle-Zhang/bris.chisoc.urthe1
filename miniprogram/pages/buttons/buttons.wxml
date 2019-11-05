@@ -9,7 +9,23 @@
 
   <button 
     class="edit-name"
-    bindtap="onTapName">{{isEditingName ? '提交' : name.length != 0 ? name : '点我修改姓名'}}</button>
+    bindtap="onTapName"
+    >{{isEditingName ? '提交' : name.length != 0 ? name : '点我修改姓名'}}
+  </button>
+
+  <picker 
+    bindchange="bindBoyPickerChange" 
+    value="{{boyindex}}" 
+    range="{{boylist}}">
+    {{boyindex == -1 ? '选择男嘉宾序号' : 1+boyindex}}
+  </picker>
+
+  <picker 
+    bindchange="bindTermPickerChange" 
+    value="{{termindex}}" 
+    range="{{termlist}}">
+    {{termindex == -1 ? '选择轮数' : termindex+1}}
+  </picker>
 
   <view class="button-container">
     <view class="shut-button-container">
@@ -28,7 +44,6 @@
         bindtap="onBoom"
       ></button>
     </view>
-
   </view>
 
 </view>

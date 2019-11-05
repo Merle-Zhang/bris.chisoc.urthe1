@@ -18,7 +18,27 @@ Page({
     
     isEditingName: false,
     name: '',
-    inputName: ''
+    inputName: '',
+
+    boylist: ['一号男嘉宾', '二号男嘉宾', '三号男嘉宾', '四号男嘉宾', '五号男嘉宾'],
+    boyindex: -1,
+
+    termlist: ['第一轮', '第二轮'],
+    termindex: -1
+  },
+
+  bindBoyPickerChange: function (e) {
+    console.log('picker发送选择改变，携带值为', e.detail.value)
+    this.setData({
+      boyindex: e.detail.value
+    })
+  },
+
+  bindTermPickerChange: function (e) {
+    console.log('picker发送选择改变，携带值为', e.detail.value)
+    this.setData({
+      termindex: e.detail.value
+    })
   },
 
   bindInputName: function (e) {
@@ -29,7 +49,6 @@ Page({
 
   onTapName: function (e) {
     if (this.data.isEditingName) {
-      // updateName(this.data.inputName)
       const db = wx.cloud.database()
       db.collection('profile').where({
         _openid: this.data.openid
@@ -63,24 +82,6 @@ Page({
             })
         }
       }).catch(console.error)
-      // const db = wx.cloud.database()
-      // db.collection("profile").doc(this.data.docId).update({
-      //   data: {
-      //     name: this.data.inputName
-      //   }
-      // })
-      //   .then(r => {
-      //     if (r.stats.updated == 0) {
-      //       console.error(r)
-      //     } else {
-      //       this.setData({
-      //         name: this.data.inputName,
-      //         inputName: ''
-      //       })
-      //       console.log(r)
-      //     }
-      //   })
-      //   .catch(console.error)
     }
     this.setData({
       isEditingName: !this.data.isEditingName
