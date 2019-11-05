@@ -2,18 +2,22 @@
 
 const app = getApp()
 
-Page({
+var dummydata = {
+  name: 'ttestt',
+  state: 0, // 0: default, 1: shut, 2: boom
+  boynum: 1,
+  term: 1
+}
 
-  /**
-   * Page initial data
-   */
+Page({
   data: {
     disabled: false,
     loading: false,
     openid: '',
     docId: '',
-    name: '',
+    
     isEditingName: false,
+    name: '',
     inputName: ''
   },
 
@@ -25,24 +29,58 @@ Page({
 
   onTapName: function (e) {
     if (this.data.isEditingName) {
+      // updateName(this.data.inputName)
       const db = wx.cloud.database()
-      db.collection("guests").doc(this.data.docId).update({
-        data: {
-          name: this.data.inputName
-        }
-      })
-        .then(r => {
-          if (r.stats.updated == 0) {
-            console.error(r)
-          } else {
-            this.setData({
-              name: this.data.inputName,
-              inputName: ''
+      db.collection('profile').where({
+        _openid: this.data.openid
+      }).get().then(res => {
+        if (res.data.length == 0) {
+          // add doc
+          db.collection('profile').add({
+            data: {
+              name: this.data.inputName
+            }
+          })
+            .then(res => {
+              console.log('add name success!!!')
+              console.log(res)
             })
-            console.log(r)
-          }
-        })
-        .catch(console.error)
+            .catch(console.error)
+        } else {
+          db.collection('profile')
+            .doc(res.data[0]._id)
+            .update({
+              data: {
+                name: this.data.inputName
+              }
+            })
+            .then(res => {
+              console.log('update name success!!!')
+              console.log(res)
+              this.setData({
+                name: this.data.inputName
+              })
+            })
+        }
+      }).catch(console.error)
+      // const db = wx.cloud.database()
+      // db.collection("profile").doc(this.data.docId).update({
+      //   data: {
+      //     name: this.data.inputName
+      //   }
+      // })
+      //   .then(r => {
+      //     if (r.stats.updated == 0) {
+      //       console.error(r)
+      //     } else {
+      //       this.setData({
+      //         name: this.data.inputName,
+      //         inputName: ''
+      //       })
+      //       console.log(r)
+      //     }
+      //   })
+      //   .catch(console.error)
     }
     this.setData({
       isEditingName: !this.data.isEditingName
@@ -54,30 +92,6 @@ Page({
       disabled: true
     })
     const db = wx.cloud.database()
-
-    // db.collection('guests').add({
-    //   data: {
-    //     count: 1
-    //   },
-    //   success: res => {
-    //     // 在返回结果中会包含新创建的记录的 _id
-    //     this.setData({
-    //       docId: res._id,
-    //     })
-    //     wx.showToast({
-    //       title: '新增记录成功',
-    //     })
-    //     console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
-    //   },
-    //   fail: err => {
-    //     wx.showToast({
-    //       icon: 'none',
-    //       title: '新增记录失败'
-    //     })
-    //     console.error('[数据库] [新增记录] 失败：', err)
-    //   }
-    // })
-
     db.collection("guests").doc(this.data.docId).update({
       data: {
         shut: true
@@ -93,30 +107,6 @@ Page({
       disabled: true
     })
     const db = wx.cloud.database()
-
-    // db.collection('guests').add({
-    //   data: {
-    //     count: 1
-    //   },
-    //   success: res => {
-    //     // 在返回结果中会包含新创建的记录的 _id
-    //     this.setData({
-    //       docId: res._id,
-    //     })
-    //     wx.showToast({
-    //       title: '新增记录成功',
-    //     })
-    //     console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
-    //   },
-    //   fail: err => {
-    //     wx.showToast({
-    //       icon: 'none',
-    //       title: '新增记录失败'
-    //     })
-    //     console.error('[数据库] [新增记录] 失败：', err)
-    //   }
-    // })
-
     db.collection("guests").doc(this.data.docId).update({
       data: {
         boom: true
@@ -126,24 +116,7 @@ Page({
       .catch(console.error)
   },
 
-  /**
-   * Lifecycle function--Called when page load
-   */
-  onLoad: function (options) {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page is initially rendered
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * Lifecycle function--Called when page show
-   */
-  onShow: function () {
+  getOpenId: function() {
     if (app.globalData.openid) {
       this.setData({
         openid: app.globalData.openid
@@ -161,42 +134,122 @@ Page({
           //   title: 'Get openid success',
           // })
 
-          const db = wx.cloud.database()
-          db.collection('guests').add({
-            data: {
-              shut: false,
-              boom: false,
-              name: ''
-            },
-            success: res => {
-              // 在返回结果中会包含新创建的记录的 _id
-              this.setData({
-                docId: res._id,
-              })
-              wx.showToast({
-                title: 'openid&新增记录成功',
-              })
-              console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
-            },
-            fail: err => {
-              wx.showToast({
-                icon: 'none',
-                title: 'openid&新增记录失败'
-              })
-              console.error('[数据库] [新增记录] 失败：', err)
-            }
-          })
+          // const db = wx.cloud.database()
+          // db.collection('guests').add({
+          //   data: {
+          //     shut: false,
+          //     boom: false,
+          //     name: 'name'
+          //   },
+          //   success: res => {
+          //     // 在返回结果中会包含新创建的记录的 _id
+          //     this.setData({
+          //       docId: res._id,
+          //     })
+          //     wx.showToast({
+          //       title: 'openid&新增记录成功',
+          //     })
+          //     console.log('[数据库] [新增记录] 成功，记录 _id: ', res._id)
+          //   },
+          //   fail: err => {
+          //     wx.showToast({
+          //       icon: 'none',
+          //       title: 'openid&新增记录失败'
+          //     })
+          //     console.error('[数据库] [新增记录] 失败：', err)
+          //   }
+          // })
 
         },
         fail: err => {
-          wx.showToast({
-            icon: 'none',
-            title: '获取 openid 失败，请检查是否有部署 login 云函数',
-          })
+          // wx.showToast({
+          //   icon: 'none',
+          //   title: '获取 openid 失败，请检查是否有部署 login 云函数',
+          // })
           console.log('[云函数] [login] 获取 openid 失败，请检查是否有部署云函数，错误信息：', err)
         }
       })
     }
+  },
+
+  initdb: function () {
+
+  },
+
+  updateName: function(inputName) {
+    const db = wx.cloud.database()
+    db.collection('profile').where({
+      _openid: this.data.openid
+    }).get().then(res => {
+      if (res.data.length == 0) {
+        // add doc
+        db.collection('profile').add({
+          data: {
+            name: inputName
+          }
+        })
+        .then(res => {
+          console.log('add name success!!!')
+          console.log(res)
+        })
+        .catch(console.error)
+      } else {
+        db.collection('profile')
+          .doc(res.data[0]._id)
+          .update({
+            data: {
+              name: inputName
+            }
+          })
+          .then(res => {
+            console.log('update name success!!!')
+            console.log(res)
+            this.setData({
+              name: inputName
+            })
+          })
+      }
+    }).catch(console.error)
+  },
+
+  /**
+   * Lifecycle function--Called when page load
+   */
+  onLoad: function (options) {
+    if (app.globalData.openid) {
+      this.setData({
+        openid: app.globalData.openid
+      })
+    } else {
+      wx.cloud.callFunction({
+        name: 'login',
+        data: {},
+        success: res => {
+          app.globalData.openid = res.result.openid
+          this.setData({
+            openid: res.result.openid
+          })
+          console.log('openid get success')
+        },
+        fail: err => {
+          console.log('[云函数] [login] 获取 openid 失败，请检查是否有部署云函数，错误信息：', err)
+        }
+      })
+    }
+  },
+
+  /**
+   * Lifecycle function--Called when page is initially rendered
+   */
+  onReady: function () {
+
+  },
+
+  /**
+   * Lifecycle function--Called when page show
+   */
+  onShow: function () {
+
   },
 
 
@@ -235,3 +288,40 @@ Page({
 
   }
 })
+
+var updateName = function(inputName) {
+  var page = getCurrentPages()
+  const db = wx.cloud.database()
+  db.collection('profile').where({
+    _openid: page.data.openid
+  }).get().then(res => {
+    if (res.data.length == 0) {
+      // add doc
+      db.collection('profile').add({
+        data: {
+          name: inputName
+        }
+      })
+        .then(res => {
+          console.log('add name success!!!')
+          console.log(res)
+        })
+        .catch(console.error)
+    } else {
+      db.collection('profile')
+        .doc(res.data[0]._id)
+        .update({
+          data: {
+            name: inputName
+          }
+        })
+        .then(res => {
+          console.log('update name success!!!')
+          console.log(res)
+          page.setData({
+            name: inputName
+          })
+        })
+    }
+  }).catch(console.error)
+}

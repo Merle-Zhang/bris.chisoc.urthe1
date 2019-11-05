@@ -47,7 +47,7 @@ Page({
         remainder: res.data.length
       })
     })
-
+    console.log(app.globalData)
 
   },
 

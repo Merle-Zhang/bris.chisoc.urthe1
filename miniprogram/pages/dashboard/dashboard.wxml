@@ -7,7 +7,7 @@
   <block wx:for="{{guestsArray}}" wx:key="id">
     <view class="item-box">
       <view class="button {{item.shut ? 'button-shut' : item.boom ? 'button-boom' : 'button-init'}}"></view>
-      <view class="guest-id"> ID: {{item.name}} </view>
+      <view class="guest-id"> {{item.name}} </view>
       <!-- <view> {{item.shut}} </view> -->
     </view>
   </block>
