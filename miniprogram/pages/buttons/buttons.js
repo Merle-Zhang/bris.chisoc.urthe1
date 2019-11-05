@@ -261,6 +261,38 @@ Page({
             openid: res.result.openid
           })
           console.log('openid get success')
+          // getname
+          const db = wx.cloud.database()
+          db.collection('profile').where({
+            _openid: this.data.openid
+          }).get().then(res => {
+            if (res.data.length == 0) {
+              // add doc
+              db.collection('profile').add({
+                data: {
+                  name: this.data.inputName
+                }
+              })
+                .then(res => {
+                  console.log('add name success!!!')
+                  console.log(res)
+                })
+                .catch(console.error)
+            } else {
+              db.collection('profile')
+                .doc(res.data[0]._id)
+                .get()
+                .then(res => {
+                  this.setData({
+                    name: res.data.name
+                  })
+                  console.log('get name success!!!')
+                  console.log(res)
+                })
+                .catch(console.error)
+            }
+          }).catch(console.error)
+
         },
         fail: err => {
           console.log('[云函数] [login] 获取 openid 失败，请检查是否有部署云函数，错误信息：', err)
