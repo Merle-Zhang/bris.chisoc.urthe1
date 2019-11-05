@@ -14,33 +14,63 @@ Page({
     disabled: false,
     loading: false,
     openid: '',
-    docId: '',
+    termDocId: '',
     
     isEditingName: false,
     name: '',
     inputName: '',
 
-    boylist: ['一号男嘉宾', '二号男嘉宾', '三号男嘉宾', '四号男嘉宾', '五号男嘉宾'],
-    boyindex: -1,
+    multiIndex: [0,0],
+    multiArray: [['一号男嘉宾', '二号男嘉宾', '三号男嘉宾', '四号男嘉宾', '五号男嘉宾'], ['第一轮', '第二轮']]
 
-    termlist: ['第一轮', '第二轮'],
-    termindex: -1
   },
 
-  bindBoyPickerChange: function (e) {
+  bindMultiPickerChange: function (e) {
     console.log('picker发送选择改变，携带值为', e.detail.value)
-    this.setData({
-      boyindex: e.detail.value
-    })
+    const db = wx.cloud.database()
+    db.collection('guests').where({
+      _openid: this.data.openid,
+      multiIndex: e.detail.value
+    }).get().then(res => {
+      if (res.data.length == 0) {
+        // add doc
+        db.collection('guests').add({
+          data: {
+            name: this.data.name,
+            state: 0,
+            multiIndex: e.detail.value
+          }
+        })
+        .then(res => {
+          this.setData({
+            termDocId: res._id,
+            multiIndex: e.detail.value
+          })
+          console.log('add termdoc success!!!')
+          console.log(res)
+        })
+        .catch(console.error)
+      } else {
+        db.collection('guests')
+          .doc(res.data[0]._id)
+          .update({
+            data: {
+              name: this.data.name
+            }
+          })
+          .then(r => {
+            console.log('update termdoc success!!!')
+            console.log(r)
+            this.setData({
+              name: this.data.inputName,
+              termDocId: res.data[0]._id,
+              multiIndex: e.detail.value
+            })
+          })
+      }
+    }).catch(console.error)
   },
-
-  bindTermPickerChange: function (e) {
-    console.log('picker发送选择改变，携带值为', e.detail.value)
-    this.setData({
-      termindex: e.detail.value
-    })
-  },
-
+  
   bindInputName: function (e) {
     this.setData({
       inputName: e.detail.value

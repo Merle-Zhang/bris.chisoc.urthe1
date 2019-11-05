@@ -13,19 +13,37 @@
     >{{isEditingName ? '提交' : name.length != 0 ? name : '点我修改姓名'}}
   </button>
 
-  <picker 
-    bindchange="bindBoyPickerChange" 
-    value="{{boyindex}}" 
-    range="{{boylist}}">
-    {{boyindex == -1 ? '选择男嘉宾序号' : 1+boyindex}}
-  </picker>
+  <!-- <view class="picker-container">
+    <picker 
+      bindchange="bindBoyPickerChange" 
+      value="{{boyindex}}" 
+      range="{{boylist}}"
+      class="picker"
+      >
+      {{boyindex == -1 ? '选择男嘉宾序号' : boylist[boyindex]}}
+    </picker>
+
+    <picker 
+      bindchange="bindTermPickerChange" 
+      value="{{termindex}}" 
+      range="{{termlist}}"
+      class="picker"
+      >
+      {{termindex == -1 ? '选择轮数' : termlist[termindex]}}
+    </picker>
+  </view> -->
 
   <picker 
-    bindchange="bindTermPickerChange" 
-    value="{{termindex}}" 
-    range="{{termlist}}">
-    {{termindex == -1 ? '选择轮数' : termindex+1}}
+    mode="multiSelector" 
+    bindchange="bindMultiPickerChange" 
+    value="{{multiIndex}}" 
+    range="{{multiArray}}"
+    class="picker-container">
+    <view class="picker">
+      当前选择：{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}
+    </view>
   </picker>
+
 
   <view class="button-container">
     <view class="shut-button-container">

@@ -7,8 +7,6 @@ page {
   justify-content: flex-start;
 }
 
-
-
 @font-face {
   font-family: 'iconfont';  /* project id 1486996 */
   src: url('//at.alicdn.com/t/font_1486996_tgqtb59vion.eot');
@@ -47,11 +45,11 @@ page {
 }
 
 .shut-button-container {
-  padding-top: 200rpx;
+  padding-top: 150rpx;
 }
 
 .boom-button-container {
-  padding-top: 350rpx;
+  padding-top: 330rpx;
 }
 
 .button {
@@ -79,6 +77,27 @@ page {
 }
 
 .edit-name {
+  font-size: 32rpx;
+  color: #007aff;
+  background-color: white;
+  background-size: cover;
+}
+
+.picker-container {
+  /* display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center; */
+  padding: 3%;
+}
+
+.picker {
+  padding: 4%;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10%;
   font-size: 32rpx;
   color: #007aff;
   background-color: white;
