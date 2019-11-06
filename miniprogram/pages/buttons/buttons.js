@@ -155,14 +155,32 @@ Page({
           }
         })
         .then(res => {
-          this.setData({
+          db.collection("guests").where({
+            multiIndex: this.data.multiIndex,
             state: 2
+          }).get().then(res => {
+            if (res.data.length != 1) {
+              db.collection("guests").doc(this.data.termDocId).update({
+                data: {
+                  state: 0
+                }
+              }).then(res => {
+                wx.showToast({
+                  icon: 'none',
+                  title: '爆灯错误，请重试',
+                })
+              }).catch(console.error)
+            } else {
+              this.setData({
+                state: 2
+              })
+              wx.showToast({
+                title: '爆灯成功',
+              })
+              console.log("[onBoom]update state to 2 success")
+              console.log(res)
+            }
           })
-          wx.showToast({
-            title: '爆灯成功',
-          })
-          console.log("[onBoom]update state to 2 success")
-          console.log(res)
         })
         .catch(res => {
           console.error("[onBoom]update state to 2 failed")
