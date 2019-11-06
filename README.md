@@ -19,7 +19,7 @@ Use OpenID as identification
 3. Show
    * State of certain girl of certain round
    * Need reopen for new round
-   * Refresh every 2s
+   * Refresh every 3s
 
 ## Known Issues
 

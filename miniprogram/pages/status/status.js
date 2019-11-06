@@ -18,7 +18,7 @@ Page({
       id: options.id
     })
     this.getState()
-    var inId = setInterval(this.getState, 2000)
+    var inId = setInterval(this.getState, 3000)
     this.setData({
       intervalId : inId
     })
