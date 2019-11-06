@@ -1,17 +1,28 @@
 <!--miniprogram/pages/dashboard/dashboard.wxml-->
 <view class="container">
 
-<text>剩余亮灯：{{remainder}}</text>
+  <text>剩余亮灯：{{remainder}}</text>
 
-<view class="container-box">
-  <block wx:for="{{guestsArray}}" wx:key="id">
-    <view class="item-box">
-      <view class="button {{item.shut ? 'button-shut' : item.boom ? 'button-boom' : 'button-init'}}"></view>
-      <view class="guest-id"> {{item.name}} </view>
-      <!-- <view> {{item.shut}} </view> -->
+  <picker 
+    mode="multiSelector" 
+    bindchange="bindMultiPickerChange" 
+    value="{{multiIndex}}" 
+    range="{{multiArray}}"
+    class="picker-container">
+    <view class="picker">
+      当前选择：{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}
     </view>
-  </block>
-</view>
+  </picker>
+
+  <view class="container-box">
+    <block wx:for="{{guestsArray}}" wx:key="id">
+      <view class="item-box">
+        <view class="button {{item.shut ? 'button-shut' : item.boom ? 'button-boom' : 'button-init'}}"></view>
+        <view class="guest-id"> {{item.name}} </view>
+        <!-- <view> {{item.shut}} </view> -->
+      </view>
+    </block>
+  </view>
 
 
 
