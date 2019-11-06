@@ -2,6 +2,21 @@
 
 This is a program developed for Chinese Society event: You Are The One
 
+## Pages
+
+Use OpenID as identification
+
+1. Buttons
+   * Change user's name
+   * Change which round(term) of which boy
+   * Shut
+   * Boom
+     * Only one boom in each round
+2. Dashboard
+   * Remaining lights
+   * Change which round(term) of which boy
+   * Show each girl's status
+
 ## Developers
 
 - Merle

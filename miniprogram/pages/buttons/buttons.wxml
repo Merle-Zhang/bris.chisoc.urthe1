@@ -50,7 +50,7 @@
       <button 
         class="iconfont icon-shut button shut-button-color" 
         loading="{{loading}}"
-        disabled="{{disabled}}"
+        disabled="{{state != 0}}"
         bindtap="onShut"
       ></button>
     </view>
@@ -58,7 +58,7 @@
       <button 
         class="iconfont icon-boom button boom-button-color" 
         loading="{{loading}}"
-        disabled="{{disabled}}"
+        disabled="{{state != 0}}"
         bindtap="onBoom"
       ></button>
     </view>

@@ -1,0 +1,6 @@
+<!--miniprogram/pages/status/status.wxml-->
+<view>
+  <view class="container">
+    <view class="button {{state == 1 ? 'button-shut' : state == 2 ? 'button-boom' : 'button-init'}}"></view>
+  </view>
+</view>

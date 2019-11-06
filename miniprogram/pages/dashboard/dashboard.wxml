@@ -16,8 +16,8 @@
 
   <view class="container-box">
     <block wx:for="{{guestsArray}}" wx:key="id">
-      <view class="item-box">
-        <view class="button {{item.shut ? 'button-shut' : item.boom ? 'button-boom' : 'button-init'}}"></view>
+      <view class="item-box" bindtap="tapAvatar" data-id="{{item._id}}">
+        <view class="button {{item.state == 1 ? 'button-shut' : item.state == 2 ? 'button-boom' : 'button-init'}}"></view>
         <view class="guest-id"> {{item.name}} </view>
         <!-- <view> {{item.shut}} </view> -->
       </view>

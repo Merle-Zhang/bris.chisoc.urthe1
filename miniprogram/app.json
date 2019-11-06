@@ -2,7 +2,8 @@
   "pages": [
     "pages/buttons/buttons",
     "pages/index/index",
-    "pages/dashboard/dashboard"
+    "pages/dashboard/dashboard",
+    "pages/status/status"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

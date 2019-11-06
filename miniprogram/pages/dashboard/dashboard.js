@@ -16,6 +16,11 @@ Page({
 
   },
 
+  tapAvatar: function (e) {
+    wx.navigateTo({
+      url: "../status/status?id=" + e.currentTarget.dataset.id
+    })
+  },
 
   bindMultiPickerChange: function (e) {
     console.log('picker发送选择改变，携带值为', e.detail.value)
@@ -60,10 +65,11 @@ Page({
         guestsArray: res.data
       })
       wx.showToast({
-        title: 'Success',
+        title: 'Get info success',
       })
-      console.log(res.data)
       console.log("get guests array success")
+      console.log(res.data)
+      this.getNames()
     })
     db.collection('guests').where({
       multiIndex: this.data.multiIndex,
@@ -72,11 +78,36 @@ Page({
       this.setData({
         remainder: res.data.length
       })
-      console.log(res.data)
       console.log("get remainder success")
+      console.log(res.data)
     })
     console.log(app.globalData)
 
+  },
+
+  getNames: function () {
+    this.data.guestsArray.forEach((guest, index, array) => {
+      var name = 'error'
+      const db = wx.cloud.database()
+      db.collection('profile').where({
+        _openid: guest._openid
+      }).get().then(res => {
+        name = res.data[0].name
+        console.log("[getNames] get name success " + name)
+        console.log(res)
+        this.data.guestsArray[index]['name'] = name
+        this.setData({
+          guestsArray: this.data.guestsArray
+        })
+      }).catch(res => {
+        console.log("[getNames] get name failed")
+        console.log(res)
+        this.data.guestsArray[index]['name'] = name
+        this.setData({
+          guestsArray: this.data.guestsArray
+        })
+      })
+    })
   },
 
   /**

@@ -1,0 +1,35 @@
+/* miniprogram/pages/status/status.wxss */
+
+page {
+  background: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button {
+    width: 700rpx;
+    height: 700rpx;
+    border-radius: 50%;
+}
+
+.button-init {
+    background: rgb(252, 3, 223);
+}
+
+.button-shut {
+    background: rgb(100, 103, 105);
+}
+
+.button-boom {
+    background: rgb(252, 3, 3);
+}

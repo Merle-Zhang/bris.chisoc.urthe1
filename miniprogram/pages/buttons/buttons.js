@@ -11,10 +11,10 @@ var dummydata = {
 
 Page({
   data: {
-    disabled: false,
-    loading: false,
     openid: '',
     termDocId: '',
+    
+    state: 0,
     
     isEditingName: false,
     name: '',
@@ -37,7 +37,7 @@ Page({
         db.collection('guests').add({
           data: {
             name: this.data.name,
-            state: 0,
+            state: this.data.state,
             multiIndex: e.detail.value
           }
         })
@@ -119,34 +119,66 @@ Page({
   },
 
   onShut: function (e) {
-    this.setData({
-      disabled: true
-    })
     const db = wx.cloud.database()
-    db.collection("guests").doc(this.data.docId).update({
+    db.collection("guests").doc(this.data.termDocId).update({
       data: {
-        shut: true
+        state: 1
       }
     })
-      .then(console.log)
-      .catch(console.error)
+    .then(res => {
+      this.setData({
+        state: 1
+      })
+      wx.showToast({
+        title: '灭灯成功',
+      })
+      console.log("[onShut]update state to 1 success")
+      console.log(res)
+    })
+    .catch(res => {
+      console.error("[onShut]update state to 1 failed")
+      console.error(res)
+    })
   },
 
 
   onBoom: function (e) {
-    this.setData({
-      disabled: true
-    })
     const db = wx.cloud.database()
-    db.collection("guests").doc(this.data.docId).update({
-      data: {
-        boom: true
+    db.collection("guests").where({
+      multiIndex: this.data.multiIndex,
+      state: 2
+    }).get().then(res => {
+      if (res.data.length == 0) {
+        db.collection("guests").doc(this.data.termDocId).update({
+          data: {
+            state: 2
+          }
+        })
+        .then(res => {
+          this.setData({
+            state: 2
+          })
+          wx.showToast({
+            title: '爆灯成功',
+          })
+          console.log("[onBoom]update state to 2 success")
+          console.log(res)
+        })
+        .catch(res => {
+          console.error("[onBoom]update state to 2 failed")
+          console.error(res)
+        })
+      } else {
+        wx.showToast({
+          icon: 'none',
+          title: '爆灯失败',
+        })
+        console.error("[onBoom]boom failed")
       }
     })
-      .then(console.log)
-      .catch(console.error)
   },
 
+  // unused
   getOpenId: function() {
     if (app.globalData.openid) {
       this.setData({
@@ -203,10 +235,7 @@ Page({
     }
   },
 
-  initdb: function () {
-
-  },
-
+  // unused
   updateName: function(inputName) {
     const db = wx.cloud.database()
     db.collection('profile').where({
@@ -247,60 +276,47 @@ Page({
    * Lifecycle function--Called when page load
    */
   onLoad: function (options) {
-    if (app.globalData.openid) {
-      this.setData({
-        openid: app.globalData.openid
-      })
-    } else {
-      wx.cloud.callFunction({
-        name: 'login',
-        data: {},
-        success: res => {
-          app.globalData.openid = res.result.openid
-          this.setData({
-            openid: res.result.openid
-          })
-          console.log('openid get success')
-          // getname
-          const db = wx.cloud.database()
-          db.collection('profile').where({
-            _openid: this.data.openid
-          }).get().then(res => {
-            if (res.data.length == 0) {
-              // add doc
-              db.collection('profile').add({
-                data: {
-                  name: this.data.inputName
-                }
-              })
-                .then(res => {
-                  console.log('add name success!!!')
-                  console.log(res)
-                })
-                .catch(console.error)
-            } else {
-              db.collection('profile')
-                .doc(res.data[0]._id)
-                .get()
-                .then(res => {
-                  this.setData({
-                    name: res.data.name
-                  })
-                  console.log('get name success!!!')
-                  console.log(res)
-                })
-                .catch(console.error)
-            }
-          }).catch(console.error)
 
-        },
-        fail: err => {
-          console.log('[云函数] [login] 获取 openid 失败，请检查是否有部署云函数，错误信息：', err)
-        }
-      })
-    }
   },
 
+  getState: function () {
+    const db = wx.cloud.database()
+    db.collection('guests').where({
+      _openid: this.data.openid,
+      multiIndex: this.data.multiIndex
+    }).get().then(res => {
+      if (res.data.length == 0) {
+        // add doc
+        db.collection('guests').add({
+          data: {
+            state: this.data.state,
+            multiIndex: this.data.multiIndex
+          }
+        })
+          .then(r => {
+            this.setData({
+              termDocId: r._id,
+            })
+            console.log('[getState]add termdoc success!!!')
+            console.log(r)
+          })
+          .catch(console.error)
+      } else {
+        db.collection('guests')
+          .doc(res.data[0]._id)
+          .get()
+          .then(r => {
+            this.setData({
+              termDocId: res.data[0]._id,
+              state: r.data.state,
+            })
+            console.log('[getState]get termdoc success!!!')
+            console.log(r)
+          })
+      }
+    }).catch(console.error)
+  },
+   
   /**
    * Lifecycle function--Called when page is initially rendered
    */
@@ -312,6 +328,54 @@ Page({
    * Lifecycle function--Called when page show
    */
   onShow: function () {
+    wx.cloud.callFunction({
+      name: 'login',
+      data: {},
+      success: res => {
+        app.globalData.openid = res.result.openid
+        this.setData({
+          openid: res.result.openid
+        })
+        console.log('openid get success')
+        // getname
+        const db = wx.cloud.database()
+        db.collection('profile').where({
+          _openid: this.data.openid
+        }).get().then(res => {
+          if (res.data.length == 0) {
+            // add doc
+            db.collection('profile').add({
+              data: {
+                name: this.data.inputName
+              }
+            })
+              .then(res => {
+                console.log('add name success!!!')
+                console.log(res)
+                this.getState()
+              })
+              .catch(console.error)
+          } else {
+            db.collection('profile')
+              .doc(res.data[0]._id)
+              .get()
+              .then(res => {
+                this.setData({
+                  name: res.data.name
+                })
+                console.log('get name success!!!')
+                console.log(res)
+                this.getState()
+              })
+              .catch(console.error)
+          }
+        }).catch(console.error)
+
+      },
+      fail: err => {
+        console.log('[云函数] [login] 获取 openid 失败，请检查是否有部署云函数，错误信息：', err)
+      }
+    })
 
   },
 
@@ -351,40 +415,3 @@ Page({
 
   }
 })
-
-var updateName = function(inputName) {
-  var page = getCurrentPages()
-  const db = wx.cloud.database()
-  db.collection('profile').where({
-    _openid: page.data.openid
-  }).get().then(res => {
-    if (res.data.length == 0) {
-      // add doc
-      db.collection('profile').add({
-        data: {
-          name: inputName
-        }
-      })
-        .then(res => {
-          console.log('add name success!!!')
-          console.log(res)
-        })
-        .catch(console.error)
-    } else {
-      db.collection('profile')
-        .doc(res.data[0]._id)
-        .update({
-          data: {
-            name: inputName
-          }
-        })
-        .then(res => {
-          console.log('update name success!!!')
-          console.log(res)
-          page.setData({
-            name: inputName
-          })
-        })
-    }
-  }).catch(console.error)
-}
