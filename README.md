@@ -16,6 +16,10 @@ Use OpenID as identification
    * Remaining lights
    * Change which round(term) of which boy
    * Show each girl's status
+3. Show
+   * State of certain girl of certain round
+   * Need reopen for new round
+   * Refresh every 2s
 
 ## Developers
 
