@@ -21,7 +21,12 @@ Use OpenID as identification
    * Need reopen for new round
    * Refresh every 2s
 
+## Known Issues
+
+1. When multiple girls boom at the same time, both of them will boom successful
+
 ## Developers
 
 - Merle
+- Simon
 

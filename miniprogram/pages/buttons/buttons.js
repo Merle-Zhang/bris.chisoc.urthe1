@@ -36,14 +36,15 @@ Page({
         // add doc
         db.collection('guests').add({
           data: {
-            name: this.data.name,
-            state: this.data.state,
+            // update state!!!!!!!!!!!!!!!!
+            state: 0,
             multiIndex: e.detail.value
           }
         })
         .then(res => {
           this.setData({
             termDocId: res._id,
+            state: 0,
             multiIndex: e.detail.value
           })
           console.log('add termdoc success!!!')
@@ -53,19 +54,18 @@ Page({
       } else {
         db.collection('guests')
           .doc(res.data[0]._id)
-          .update({
-            data: {
-              name: this.data.name
-            }
-          })
+          .get()
           .then(r => {
-            console.log('update termdoc success!!!')
+            console.log('[bindMultiPickerChange]get termdoc success!!!')
             console.log(r)
             this.setData({
-              name: this.data.inputName,
               termDocId: res.data[0]._id,
-              multiIndex: e.detail.value
+              multiIndex: e.detail.value,
+              state: r.data.state,
             })
+          }).catch(r => {
+            console.error('[bindMultiPickerChange]get termdoc failed!!!')
+            console.error(r)
           })
       }
     }).catch(console.error)
@@ -289,13 +289,14 @@ Page({
         // add doc
         db.collection('guests').add({
           data: {
-            state: this.data.state,
+            state: 0,
             multiIndex: this.data.multiIndex
           }
         })
           .then(r => {
             this.setData({
               termDocId: r._id,
+              state: 0,
             })
             console.log('[getState]add termdoc success!!!')
             console.log(r)
@@ -346,7 +347,7 @@ Page({
             // add doc
             db.collection('profile').add({
               data: {
-                name: this.data.inputName
+                name: ''
               }
             })
               .then(res => {
