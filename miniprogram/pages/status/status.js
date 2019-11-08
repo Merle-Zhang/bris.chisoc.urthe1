@@ -28,6 +28,9 @@ Page({
     const db = wx.cloud.database()
     db.collection('guests').doc(this.data.id).get()
       .then(res => {
+        if (res.data.state == 1 && this.data.state == 0) {
+          this.audioPlay();
+        }
         this.setData({
           state: res.data.state
         })
@@ -37,6 +40,13 @@ Page({
         console.error("[onLoad] get statse failed" + this.data.id)
         console.error(res)
       })
+  },
+
+  audioPlay: function () {
+    const innerAudioContext = wx.createInnerAudioContext()
+    innerAudioContext.src = '/audio/shut.mp3'
+    innerAudioContext.play()
+    console.log("play audio")
   },
 
   /**
