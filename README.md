@@ -24,6 +24,16 @@ Use OpenID as identification
 ## Known Issues
 
 1. When multiple girls boom at the same time, both of them will boom successful
+2. multiple shut
+3. 心动女生
+4. Dashboard change round won't update name and state
+5. Need a way to monitor state of all girls
+
+## Usage of the script
+
+use with QLab on Mac
+
+    python request.py
 
 ## Developers
 
